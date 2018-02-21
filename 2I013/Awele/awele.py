@@ -6,7 +6,7 @@ import game
 def initPlateau () :
     """void->plateau
     initialise le plateau : 4 graines dans chaque case"""
-    plateau = [[4,4,4,4,4,4],[4,4,4,4,4,4]]
+    plateau = [[4,1,1,1,1,4],[4,4,4,4,4,4]]
     return plateau
 
 def initScore():
@@ -140,7 +140,7 @@ def manger (jeu,coup):
     jeu_bis=game.getCopieJeu(jeu)
     case_val = game.getCaseVal(jeu,coup[0],coup[1])
 
-    while (case_val== 2) or (case_val== 3) : #and (coup[1]>=0 and coup[1]<6):
+    while ((case_val== 2) or (case_val== 3)) and jeu[0][1]==game.getAdversaire(jeu)-1: 
     	print "valeur de la case a manger  : {}, coordonnees {}".format(case_val, coup)
         jeu[4][jeu[1]-1] += case_val #mise a jour du score
         #game.setCaseVal(jeu_bis, coup_bis[0], coup_bis[1],0)
