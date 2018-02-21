@@ -6,7 +6,7 @@ import game
 def initPlateau () :
     """void->plateau
     initialise le plateau : 4 graines dans chaque case"""
-    plateau = [[4,1,1,1,1,4],[4,4,4,4,4,4]]
+    plateau = [[4,4,4,4,4,4],[4,4,4,4,4,4]]
     return plateau
 
 def initScore():
@@ -17,16 +17,11 @@ def initScore():
     
     
 def finPartie (jeu) : 
-    #plateau = jeu[0]
-    for i in range(2) :
-        for j in range(6) : 
-            if jeu[0][i][j]!=0 : 
-                return False
-    if len(jeu[3]) > 10 : 
-        return False
+    if len(jeu[3]) > 100 : 
+        return True
     if jeu[4][0]>24 or jeu[4][1]>24 : 
-        return False
-    return True 
+        return True
+    return False 
 
 
 def gagnant (jeu) : 
@@ -34,10 +29,10 @@ def gagnant (jeu) :
     renvoie le numero du joueur gagant, 0 si match nul"""
     score = jeu[4]
     if score[0]>score[1] : 
-        print "le joueur 1 a gagne"
+        #print "le joueur 1 a gagne"
         return 1
-    if score[1]>score[2] : 
-        print "le joueur 2 a gagane"
+    if score[1]>score[0] : 
+        #print "le joueur 2 a gagne"
         return 2
     print "match nul"
     return 0
@@ -47,15 +42,12 @@ def joueCoup(jeu, coup) :
     """jeu*coup->jeu
     re-initialise le jeu en fonction du coup joue    
     """
-  
-    
     nb_graines = game.getCaseVal(jeu, coup[0], coup[1])
     game.setCaseVal(jeu, coup[0], coup[1], 0)
     distribueJeu(jeu, coup, nb_graines)
     jeu[3].append(coup)
     jeu[2]=None
     game.changeJoueur(jeu)
-
 
 def coupValide (jeu, coup, affame = False) : 
     """jeu*coup*bool -> bool
@@ -82,12 +74,6 @@ def getCoupsValides (jeu) :
    
 def estAffame (jeu, adversaire) :
     """jeu*joueur -> bool
-    joueur = joueur%2+1
-    #case=jeu[0]
-    for i in range(6) : 
-        if game.getCaseVal(jeu, jeu[0][joueur-1], jeu[0][i])!=0 : 
-            return False
-    return True
     """
     
     ligne = game.getAdversaire(jeu)-1
@@ -119,17 +105,16 @@ def distribueJeu (jeu, coup, nb_graines) :
     """jeu*coup*nat-> jeu
     distribue les graines""" 
     
-    case = [coup[0], coup[1]]
+    case = coup
 
     while (nb_graines > 0) : 
-        coup = nextCase(jeu, coup)
-
+        case = nextCase(jeu, case)
         if (case == coup) :
             continue
-        jeu[0][coup[0]][coup[1]]+=1
+        jeu[0][case[0]][case[1]]+=1
         nb_graines -=1
     
-    manger(jeu,coup)
+    manger(jeu,case)
 
 def manger (jeu,coup):
     """
@@ -140,12 +125,13 @@ def manger (jeu,coup):
     jeu_bis=game.getCopieJeu(jeu)
     case_val = game.getCaseVal(jeu,coup[0],coup[1])
 
-    while ((case_val== 2) or (case_val== 3)) and jeu[0][1]==game.getAdversaire(jeu)-1: 
-    	print "valeur de la case a manger  : {}, coordonnees {}".format(case_val, coup)
+    while (case_val== 2) or (case_val== 3) and jeu[0][1]==game.getAdversaire(jeu)-1 :
+    	#print "valeur de la case a manger  : {}, coordonnees {}".format(case_val, coup)
         jeu[4][jeu[1]-1] += case_val #mise a jour du score
+        #print "score : {}".format (jeu[4][jeu[1]-1])
         #game.setCaseVal(jeu_bis, coup_bis[0], coup_bis[1],0)
         jeu[0][coup[0]][coup[1]] = 0
-        print "case mangee?  : {}, coordonnees {}".format(jeu[0][coup[0]][coup[1]], coup)
+        #print "case mangee?  : {}, coordonnees {}".format(jeu[0][coup[0]][coup[1]], coup)
         if coup[0]==0 : #cas ou le joueur 2 mange
             if coup[1]<5:
                 coup[1]+=1
@@ -153,10 +139,10 @@ def manger (jeu,coup):
             if coup [1]>0:
                 coup[1]-=1
         case_val = game.getCaseVal(jeu,coup[0],coup[1])
-        print "valeur de la nouvelle case a manger  : {}, coordonnees {}".format(case_val, coup) 
+        #print "valeur de la nouvelle case a manger  : {}, coordonnees {}".format(case_val, coup) 
     
     if estAffame(jeu, game.getAdversaire(jeu)) :
-        print "on n'a pas pu manger"
+        #print "on n'a pas pu manger"
         for i in range(5):
             jeu[i]=jeu_bis[i]
         
