@@ -14,15 +14,18 @@
 #           - Une paire de scores correspondant au score du joueur 1 et du score du joueur 2
 
 import sys
-sys.path.append ("./Awele")
-import awele
-sys.path.append ("./Joueurs")
-import joueur_humain
-import joueur_premiercoup
 
-game=awele #Contient le module du jeu specifique: awele ou othello
-joueur1=joueur_premiercoup #Contient le module du joueur 1
-joueur2=joueur_premiercoup #Contient le module du joueur 2
+#sys.path.append ("..")
+
+#import awele
+#sys.path.append ("./Joueurs")
+#import joueurMiniMax
+#import joueur_derniercoup
+#import joueur_aleatoire
+
+game=None #awele #Contient le module du jeu specifique: awele ou othello
+joueur1=None #joueurMiniMax #Contient le module du joueur 1
+joueur2=None #joueur_aleatoire #Contient le module du joueur 2
 
 
 #Fonctions minimales 
@@ -48,7 +51,7 @@ def finJeu(jeu):
     """
     if game.finPartie(jeu) : 
         return True 
-    if getCoupsValides == []:
+    if len(getCoupsValides(jeu)) == 0:
         return True 
     return False
 
@@ -119,9 +122,10 @@ def affiche(jeu):
                     
          Hypothese : le contenu de chaque case ne depasse pas 5 caracteres
     """
-    if (jeu[3] == None) :
-        print "Pas de jeu a afficher"
     
+    print("Coups joues : "+str(jeu[3]))
+   
+    print "Joueur : {}".format(jeu[1])
     print "Scores = {}, {}".format(jeu [4][0],jeu[4][1])
     print "Plateau  : "
     print"       |  ",
