@@ -36,7 +36,7 @@ def getCopieJeu(jeu):
         Quand on copie un jeu on en calcule forcement les coups valides avant
     """
     jeu[2] = getCoupsValides (jeu)
-    [score1, score2] =jeu[4]
+    [score1, score2] =[jeu[4][0], jeu [4][1]]
     plateau=[[j for j in i] for i in jeu[0]]
     coupsPossibles=[i for i in jeu[2]]
     coupsJoues=[i for i in jeu[3]]
