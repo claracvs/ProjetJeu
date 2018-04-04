@@ -8,11 +8,15 @@ sys.path.append("./Joueurs")
 import joueurMiniMax
 import joueurMiniMaxElag
 import joueur_aleatoire
-import joueur_derniercoup
-import joueur_humain
+import joueurDefaillant
+#import joueur_humain
+import time
 
-game.joueur1=joueurMiniMax
-game.joueur2=joueurMiniMaxElag
+game.joueur1= joueurDefaillant
+game.joueur2=  joueurMiniMaxElag
+
+
+debut=time.time()
 
 def joue ():
     """void -> nat
@@ -20,7 +24,7 @@ def joue ():
     jeu = game.initialiseJeu ()
     
     for i in range (4):
-        random.seed(2)
+        random.seed()
         coup = joueur_aleatoire.saisieCoup(jeu)
         game.joueCoup(jeu, coup)
     
@@ -30,25 +34,32 @@ def joue ():
         game.joueCoup(jeu, coup)
     return game.getGagnant (jeu)
     
-victoires = [0,0]
-for i in range (50) : 
-    gagnant = joue()
-    if gagnant!=0 :
-        victoires[gagnant-1]+=1
+def joue100parties () : 
+    victoires = [0,0]
 
-print str(victoires)
+    for i in range (50) : 
+        gagnant = joue()
+        if gagnant!=0 :
+            victoires[gagnant-1]+=1
+    
+    print str(victoires)
+    moitie = time.time()
+    #print (moitie-debut)
+    
+    joueur = game.joueur2
+    game.joueur2 = game.joueur1
+    game.joueur1 = joueur
+    
+    for i in range (50) : 
+        gagnant=joue()
+        if gagnant!=0 :
+            victoires[gagnant%2]+=1
+    
+    print str(victoires)
+    fin = time.time ()
+    #print ("temps de jeu : " + str(fin-debut))
+    return victoires
 
-joueur = game.joueur2
-game.joueur2 = game.joueur1
-game.joueur1 = joueur
-
-for i in range (50) : 
-    gagnant=joue()
-    if gagnant!=0 :
-        victoires[gagnant%2]+=1
-
-print str(victoires)
-
-
+vic = joue100parties()
 
 
