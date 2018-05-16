@@ -7,13 +7,11 @@ game.game=awele
 sys.path.append("./Joueurs")
 import joueurMiniMax
 import joueurMiniMaxElag
-import joueur_aleatoire
-import joueurDefaillant
-#import joueur_humain
+import joueurMiniMaxElag2
 import time
 
-game.joueur1= joueurDefaillant
-game.joueur2=  joueurMiniMaxElag
+game.joueur1= joueurMiniMaxElag
+game.joueur2=  joueurMiniMaxElag2
 
 
 debut=time.time()
@@ -34,15 +32,15 @@ def joue ():
         game.joueCoup(jeu, coup)
     return game.getGagnant (jeu)
     
-def joue100parties () : 
+def joueNparties (n) : 
     victoires = [0,0]
 
-    for i in range (50) : 
+    for i in range (n/2) : 
         gagnant = joue()
         if gagnant!=0 :
             victoires[gagnant-1]+=1
     
-    print str(victoires)
+    #print str(victoires)
     moitie = time.time()
     #print (moitie-debut)
     
@@ -50,16 +48,20 @@ def joue100parties () :
     game.joueur2 = game.joueur1
     game.joueur1 = joueur
     
-    for i in range (50) : 
+    for i in range (n/2) : 
         gagnant=joue()
         if gagnant!=0 :
             victoires[gagnant%2]+=1
     
     print str(victoires)
+    joueur = game.joueur1
+    game.joueur1 = game.joueur2
+    game.joueur2 = joueur
+    
     fin = time.time ()
-    #print ("temps de jeu : " + str(fin-debut))
+    print ("temps de jeu : " + str(fin-debut))
     return victoires
 
-vic = joue100parties()
+vic = joueNparties(100)
 
 
